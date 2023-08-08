@@ -120,12 +120,12 @@ class _AuthCardState extends State<AuthCard> {
         error = "You entered an existing email address. Try using another one.";
     }
     if(error==null)
-      Navigator.of(context).pushNamed("/home");
+      Navigator.of(context).pushReplacementNamed("/home");
     else{
       ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(error),
-        duration: Duration(seconds: 3), // You can customize the duration here
+        duration: Duration(seconds: 3),
       ),
     );
     }

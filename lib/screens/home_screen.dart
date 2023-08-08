@@ -9,11 +9,11 @@ import '../models/user.dart';
 import '../providers/auth.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({@required this.title, @required this.authenticatedUser});
+  const MyHomePage({@required this.authenticatedUser});
 
   final User authenticatedUser;
 
-  final String title;
+  final String title = "My Home Page";
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -28,6 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Provider.of<Auth>(context, listen: false).logout();
     Navigator.of(context).pushReplacementNamed("/auth");
   }
+  
   void openMap(){
     Navigator.of(context).pushNamed(MapAllExamsScreen.routeName);
   }
@@ -53,6 +54,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
   Widget ListOfSubjects() {
+
+    if(widget.authenticatedUser == null)
+    {
+      return CircularProgressIndicator();
+    }
 
     List<Exam> appropriateSubjects = [];
     if (selectedDate == null)
@@ -103,14 +109,15 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               Container(height: 10),
               Container(child: Text("Welcome, ${Provider.of<Auth>(context, listen: false).username}"),),
-
+              TextButton(onPressed: logout, child: Text('Log out')),
+              Container(height: 30,),
               TextButton(onPressed: openMap, child: Text('Open Map to view location of all exams')),
 
-              TextButton(onPressed: logout, child: Text('Log out')),
-              Container(height: 20,),
-              TextButton(onPressed: resetSelectedDate, child: Text('View all of your courses')),
-              Text('Open calendar to find courses on a specific date!'),
+              Container(height: 80,),
+              if (selectedDate != null) TextButton(onPressed: resetSelectedDate, child: Text('View all of your exams')),
+              Text('Open calendar to find exams on a specific date!'),
               Text(selectedDate==null? 'No date chosen' : 'Chosen date is ' + DateFormat().add_yMMMd().format(selectedDate)),
+              Container(height: 50,),
               Container(
                 height: MediaQuery.of(context).size.height * 0.6,
                 child: ListOfSubjects(),

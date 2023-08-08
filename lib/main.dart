@@ -42,11 +42,11 @@ class MyApp extends StatelessWidget {
       create: (context) => Auth(),
       child: MaterialApp(
         routes: {
-          "/home": (context) => MyHomePage(title: "My Home Page", authenticatedUser: Provider.of<Auth>(context, listen: false).authenticatedUser),
+          "/home": (context) => MyHomePage(authenticatedUser: Provider.of<Auth>(context).authenticatedUser),
           "/auth": (context) => AuthScreen(),
           "/map": (context) => MapScreen(),
           MapAllExamsScreen.routeName: (context) => MapAllExamsScreen(),
-          "/add-exam" : (context) => AddExamScreen("Add Exam")
+          "/add-exam" : (context) => AddExamScreen()
         },
         title: 'Flutter Demo',
         theme: ThemeData(

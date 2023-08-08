@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_lab_3/screens/add_exam_screen.dart';
 
 
 
@@ -26,7 +27,11 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   void addItemFunction(BuildContext ct) {
-    Navigator.of(context).pushNamed("/add-exam");
+    // Navigator.of(context).pushNamed("/add-exam");
+    showModalBottomSheet(
+      context: context,
+      builder: ((context) => AddExamScreen()),
+    );
     
   }
 

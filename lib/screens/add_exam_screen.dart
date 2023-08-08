@@ -13,23 +13,14 @@ import '../models/exam.dart';
 import '../providers/auth.dart';
 
 class AddExamScreen extends StatefulWidget {
-  final String title;
-  const AddExamScreen(this.title, {Key key}) : super(key: key);
+  final String title = "Add Exam";
+  const AddExamScreen({Key key}) : super(key: key);
 
   @override
   State<AddExamScreen> createState() => _AddExamScreenState();
 }
 
 class _AddExamScreenState extends State<AddExamScreen> {
-
-// String previewImageUrl;
-// Future<void> getCurrentLocation() async {
-//     final locData = await Location().getLocation();
-//     setState(() {
-//     previewImageUrl = LocationHelper.generateLocationPreviewImage(latitude: locData.latitude, longitude: locData.longitude);
-//     });
-//   }
-
 
 final nameController = TextEditingController();
 
@@ -71,7 +62,7 @@ final nameController = TextEditingController();
   }
 
   void submitData() {
-    if (nameController.text.isEmpty) {
+    if (nameController.text.isEmpty || selectedLocation == null) {
       return;
     }
     final vnesenoIme = nameController.text;
@@ -79,7 +70,7 @@ final nameController = TextEditingController();
     final newExam =
         Exam(id: nanoid(5), name: vnesenoIme, dateTime: vnesenDatum, location: selectedLocation);
     Provider.of<Auth>(context, listen: false).addNewItemToList(newExam);
-
+    
     Provider.of<Auth>(context, listen: false).scheduleNotificationsForLoggedInUser();
     
     Navigator.of(context).pop();
@@ -115,15 +106,57 @@ final nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-      title: Text(widget.title),
-      actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.map), onPressed: selectOnMap),
-        ],
-    ),
-    body: Container(
+    // return Scaffold(
+    //     appBar: AppBar(
+    //   title: Text(widget.title),
+    //   actions: <Widget>[
+    //       IconButton(
+    //           icon: Icon(Icons.map), onPressed: selectOnMap),
+    //     ],
+    // ),
+    // body: Container(
+    //   padding: EdgeInsets.all(8),
+    //   child: Column(
+    //     children: [
+    //       TextField(
+    //         controller: nameController,
+    //         decoration: InputDecoration(labelText: "Име на предметот"),
+    //         onSubmitted: (_) => submitData(),
+    //       ),
+    //       Container(
+    //         height: 50,
+    //         child: Row(
+    //           children: [
+    //             Expanded(child: Text(selectedDate == null ? 'No date chosen' :  DateFormat().add_yMMMd().format(selectedDate))),
+    //             TextButton(child: Text('Choose date', style: TextStyle(color: Theme.of(context).primaryColorDark, fontWeight: FontWeight.bold),), onPressed: presentDatePicker,),
+    //           ],
+    //         ),
+    //       ),
+
+    //       Container(
+    //         height: 50,
+    //         child: Row(
+    //           children: [
+    //             Expanded(child: Text(selectedTime == null ? 'No time chosen' : '${selectedTime.hour}:${selectedTime.minute}')),
+    //             TextButton(child: Text('Choose time', style: TextStyle(color: Theme.of(context).primaryColorDark, fontWeight: FontWeight.bold),), onPressed: presentTimePicker,),
+    //           ],
+    //         ),
+    //       ),
+    //       Container(height: 10,),
+    //       TextButton(child: Text(selectedLocation == null ? "Open map to set location" : "Location set. Tap to change."), onPressed: () => selectOnMap(),),
+
+    //       Container(height: 10),
+    //       ElevatedButton(
+    //         style: ElevatedButton.styleFrom(
+    //             backgroundColor: Theme.of(context).primaryColor),
+    //         child: Text("Add"),
+    //         onPressed: selectedLocation != null ? () => submitData() : null,
+    //       )
+    //     ],
+    //   ),
+    // )
+    // );
+    return Container(
       padding: EdgeInsets.all(8),
       child: Column(
         children: [
@@ -159,12 +192,10 @@ final nameController = TextEditingController();
             style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).primaryColor),
             child: Text("Add"),
-            onPressed: () => submitData(),
+            onPressed: selectedLocation != null ? () => submitData() : null,
           )
         ],
       ),
-    )
-    // body: previewImageUrl != null ? Image.network(previewImageUrl) : Center(child: Text("No image yet"),)
     );
   }
 }
